@@ -6,8 +6,8 @@ const context = canvas.getContext('2d')
 const raioDaBola = 10
 const alturaDaRaquete = 10
 const larguraDaRaquete = 75
-const contagemDeBlocosEmLinha = 6
-const contagemDeBlocosEmColuna = 3
+const contagemDeBlocosEmLinha = 2
+const contagemDeBlocosEmColuna = 1
 const larguraDoBloco = 75
 const alturaDoBloco = 20
 const enchimentoDoBloco = 10
@@ -25,8 +25,16 @@ let esquerdaPressionada = false
 
 let x = canvas.width / 2
 let y = canvas.height - 30
-let dx = 2
-let dy = -2
+let nivel
+if(localStorage.getItem('nivel') !== null){
+  nivel = 1
+  localStorage.setItem('nivel', nivel.toString())
+}else{
+  nivel = parseInt(localStorage.getItem('nivel'))
+}
+let dx = nivel
+let dy = -nivel
+
 
 let pontos = 0
 let vidas = 3
@@ -78,7 +86,10 @@ function detectaColisao() {
           pontos++
 
           if (pontos == contagemDeBlocosEmLinha * contagemDeBlocosEmColuna) {
-            alert('Você ganhou, parabéns')
+            alert('Você passou para o próximo nível, parabéns!')
+            nivel++
+            localStorage.setItem('nivel', nivel.toString())
+            document.location.reload()
           }
         }
       }
