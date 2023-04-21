@@ -6,8 +6,8 @@ const context = canvas.getContext('2d')
 const raioDaBola = 10
 const alturaDaRaquete = 10
 const larguraDaRaquete = 75
-const contagemDeBlocosEmLinha = 2
-const contagemDeBlocosEmColuna = 1
+const contagemDeBlocosEmLinha = 6
+const contagemDeBlocosEmColuna = 3
 const larguraDoBloco = 75
 const alturaDoBloco = 20
 const enchimentoDoBloco = 10
@@ -26,25 +26,28 @@ let esquerdaPressionada = false
 let x = canvas.width / 2
 let y = canvas.height - 30
 let nivel
-if(localStorage.getItem('nivel') !== null){
+let vidas = 3
+if (localStorage.getItem('nivel') === null || localStorage.getItem('nivel') === '1') {
   nivel = 1
   localStorage.setItem('nivel', nivel.toString())
-}else{
+  localStorage.setItem('vidas', '3')
+} else {
   nivel = parseInt(localStorage.getItem('nivel'))
+  vidas = parseInt(localStorage.getItem('vidas'))
 }
 let dx = nivel
 let dy = -nivel
 
 
 let pontos = 0
-let vidas = 3
+
 
 const blocos: Bloco[][] = []
 
 for (let c = 0; c < contagemDeBlocosEmColuna; c++) {
   blocos[c] = []
   for (let l = 0; l < contagemDeBlocosEmLinha; l++) {
-    blocos[c][l] = {x: 0, y: 0, estado: 1}
+    blocos[c][l] = { x: 0, y: 0, estado: 1 }
   }
 }
 
@@ -172,8 +175,11 @@ function desenha() {
       dy = -dy
     } else {
       vidas--
+      localStorage.setItem('vidas', vidas.toString())
       if (!vidas) {
         alert('Fim de jogo')
+        localStorage.setItem('nivel', '1')
+        localStorage.setItem('vidas', '3')
         document.location.reload()
       } else {
         x = canvas.width / 2
@@ -181,6 +187,8 @@ function desenha() {
         dx = 2
         dy = -2
         raqueteX = (canvas.width - larguraDaRaquete) / 2
+        dx = parseInt(localStorage.getItem('nivel'))
+        dy = parseInt(localStorage.getItem('nivel'))
       }
     }
   }
